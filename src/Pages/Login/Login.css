@@ -1,4 +1,4 @@
-body {
+.login-wrapper {
   background-color: #045ce94e;
   background-image: linear-gradient(50deg, #045ce958 0%, #97e9ff 74%);
 }
@@ -91,7 +91,6 @@ body {
   font-size: .8em;
   font-weight: 500;
   letter-spacing: 1px;
-  margin: 10px;
   cursor: pointer;
   border-radius: 20px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
@@ -110,4 +109,10 @@ body {
   text-decoration: none;
   padding: 8px 15px;
   border-radius: 20px;
+}
+
+.error-message {
+  margin: 15px 0;
+  z-index: 1;
+  font-weight: 600;
 }
