@@ -3,14 +3,39 @@ import "./Admin.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import menuBar from "../../assets/images/menu-bar.png";
 import dashboard from "../../assets/images/dashboard.png";
+import dashboardBlue from "../../assets/images/dashboard-blue.png";
 import news from "../../assets/images/news.png";
+import newsBLue from "../../assets/images/news-blue.png";
 import stations from "../../assets/images/station.png";
+import stationBlue from "../../assets/images/station-blue.png";
 import devices from "../../assets/images/devices.png";
+import devicesBlue from "../../assets/images/devices-blue.png";
 import user from "../../assets/images/user.png";
+import userBlue from "../../assets/images/user-blue.png";
 import userLogout from "../../assets/images/user-logout.png";
 import logout from "../../assets/images/logout.png";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import AdminDashboard from "../AdminDashboard/AdminDashboard";
+import AdminNew from "../AdminNews/AdminNew";
+import AdminStation from "../AdminStation/AdminStation";
+import AdminDevicesNotWorking from "../AdminDevicesNotWorking/AdminDevicesNotWorking";
+import AdminUser from "../AdminUser/AdminUser";
 
 const Admin = () => {
+  const token = window.localStorage.getItem("accessToken");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  if (!token) {
+    window.location.href = "/";
+  }
+
+  function logoutFunction() {
+    window.localStorage.removeItem("accessToken");
+    window.localStorage.removeItem("refreshToken");
+    window.location.reload();
+  }
+
   return (
     <HelmetProvider>
       <div className="admin-wrapper">
@@ -26,13 +51,23 @@ const Admin = () => {
           </div>
           <ul className="nav-links">
             <li>
-              <a href="#">
+              <a
+                href="#"
+                className={
+                  location.pathname == "/admin"
+                    ? "sidebar-active sidebar-style"
+                    : "sidebar-style"
+                }
+                onClick={() => navigate("/admin")}
+              >
                 <img
                   className="bx bx-menu"
-                  src={dashboard}
+                  src={
+                    location.pathname == "/admin" ? dashboardBlue : dashboard
+                  }
                   alt="menuBar"
-                  width={30}
-                  height={30}
+                  width={26}
+                  height={26}
                 />
                 <span className="link_name ms-3">Dashboard</span>
               </a>
@@ -46,17 +81,24 @@ const Admin = () => {
             </li>
             <li className="mt-3">
               <div className="icon-link">
-                <a href="#">
+                <a
+                  href="#"
+                  className={
+                    location.pathname == "/admin/news"
+                      ? "sidebar-active sidebar-style"
+                      : "sidebar-style"
+                  }
+                  onClick={() => navigate("/admin/news")}
+                >
                   <img
                     className="bx bx-menu"
-                    src={news}
+                    src={location.pathname == "/admin/news" ? newsBLue : news}
                     alt="menuBar"
-                    width={30}
-                    height={30}
+                    width={26}
+                    height={26}
                   />
                   <span className="link_name ms-3">Ma'lumotlar</span>
                 </a>
-                <i className="bx bxs-chevron-down arrow"></i>
               </div>
               <ul className="sub-menu">
                 <li>
@@ -64,30 +106,32 @@ const Admin = () => {
                     Ma'lumotlar
                   </a>
                 </li>
-                <li>
-                  <a href="#">HTML & CSS</a>
-                </li>
-                <li>
-                  <a href="#">JavaScript</a>
-                </li>
-                <li>
-                  <a href="#">PHP & MySQL</a>
-                </li>
               </ul>
             </li>
             <li className="mt-3">
               <div className="icon-link">
-                <a href="#">
+                <a
+                  href="#"
+                  className={
+                    location.pathname == "/admin/stations"
+                      ? "sidebar-active sidebar-style"
+                      : "sidebar-style"
+                  }
+                  onClick={() => navigate("/admin/stations")}
+                >
                   <img
                     className="bx bx-menu"
-                    src={stations}
+                    src={
+                      location.pathname == "/admin/stations"
+                        ? stationBlue
+                        : stations
+                    }
                     alt="menuBar"
-                    width={30}
-                    height={30}
+                    width={26}
+                    height={26}
                   />
                   <span className="link_name ms-3">Stansiyalar</span>
                 </a>
-                <i className="bx bxs-chevron-down arrow"></i>
               </div>
               <ul className="sub-menu">
                 <li>
@@ -95,25 +139,28 @@ const Admin = () => {
                     Stansiyalar
                   </a>
                 </li>
-                <li>
-                  <a href="#">Web Design</a>
-                </li>
-                <li>
-                  <a href="#">Login Form</a>
-                </li>
-                <li>
-                  <a href="#">Card Design</a>
-                </li>
               </ul>
             </li>
             <li className="mt-3">
-              <a href="#">
+              <a
+                href="#"
+                className={
+                  location.pathname == "/admin/devices/notworking"
+                    ? "sidebar-active sidebar-style"
+                    : "sidebar-style"
+                }
+                onClick={() => navigate("/admin/devices/notworking")}
+              >
                 <img
                   className="bx bx-menu"
-                  src={devices}
+                  src={
+                    location.pathname == "/admin/devices/notworking"
+                      ? devicesBlue
+                      : devices
+                  }
                   alt="menuBar"
-                  width={30}
-                  height={30}
+                  width={26}
+                  height={26}
                 />
                 <span className="link_name ms-3">Ishlamayotgan qurilmalar</span>
               </a>
@@ -126,13 +173,21 @@ const Admin = () => {
               </ul>
             </li>
             <li className="mt-3">
-              <a href="#">
+              <a
+                href="#"
+                className={
+                  location.pathname == "/admin/users"
+                    ? "sidebar-active sidebar-style"
+                    : "sidebar-style"
+                }
+                onClick={() => navigate("/admin/users")}
+              >
                 <img
                   className="bx bx-menu"
-                  src={user}
+                  src={location.pathname == "/admin/users" ? userBlue : user}
                   alt="menuBar"
-                  width={30}
-                  height={27}
+                  width={26}
+                  height={26}
                 />
                 <span className="link_name ms-3">User</span>
               </a>
@@ -146,11 +201,11 @@ const Admin = () => {
             </li>
           </ul>
         </div>
-        <header className="home-section">
-          <div className="container-fluid py-2">
-            <div class="dropdown text-end">
+        <header className="home-section-header">
+          <div className="container-fluid py-3">
+            <div className="dropdown text-end">
               <button
-                class="btn-logout dropdown-toggle"
+                className="btn-logout dropdown-toggle"
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
@@ -162,28 +217,48 @@ const Admin = () => {
                   width={30}
                   height={30}
                 />
-                <span className="mx-1">Smart Water</span>
+                <span className="mx-2">Smart Water</span>
               </button>
-              <ul class="dropdown-menu">
+              <ul className="dropdown-menu">
                 <li className="d-flex align-items-center justify-content-center ms-auto">
-                  <img
-                    className="bx bx-menu ms-2"
-                    src={logout}
-                    alt="menuBar"
-                    width={22}
-                    height={22}
-                  />
-                  <a class="dropdown-item ps-1" href="#">
-                    Chiqish
+                  <a
+                    className="dropdown-item ps-1 d-flex align-items-center"
+                    href="#"
+                    onClick={logoutFunction}
+                  >
+                    <img
+                      className="bx bx-menu mx-2"
+                      src={logout}
+                      alt="menuBar"
+                      width={22}
+                      height={22}
+                    />
+                    <span>Chiqish</span>
                   </a>
                 </li>
               </ul>
             </div>
           </div>
         </header>
+
+        <section className="home-section py-3">
+          <div className="container-fluid">
+            <Routes>
+              <Route path="/" element={<AdminDashboard />} />
+              <Route path="/news" element={<AdminNew />} />
+              <Route path="/station" element={<AdminStation />} />
+              <Route
+                path="/devices/notworking"
+                element={<AdminDevicesNotWorking />}
+              />
+              <Route path="/users" element={<AdminUser />} />
+            </Routes>
+          </div>
+        </section>
       </div>
+
       <Helmet>
-        <script src="src/assets/js/Admin.js"></script>
+        <script src="../src/assets/js/Admin.js"></script>
       </Helmet>
     </HelmetProvider>
   );

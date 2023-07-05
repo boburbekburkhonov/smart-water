@@ -18,7 +18,9 @@
   left: 0;
   height: 100%;
   width: 260px;
-  background: #318effd9;
+  background: #373B44;
+  background: -webkit-linear-gradient(to right, #4286f4, #373B44);
+  background: linear-gradient(180deg, #4286f4, #373B44);
   z-index: 100;
   transition: all 0.5s ease;
 }
@@ -71,9 +73,7 @@
   list-style: none;
   transition: all 0.4s ease;
 }
-/* .sidebar .nav-links li:hover {
-  background-color: #f3f1f6;
-} */
+
 .sidebar .sub-menu li:hover {
   background: none;
   color: #0073ffd9;
@@ -118,6 +118,7 @@
   color: #ffffff;
   transition: all 0.4s ease;
 }
+
 .sidebar.close .nav-links li a .link_name {
   opacity: 0;
   pointer-events: none;
@@ -225,9 +226,18 @@
 .sidebar .profile-details .job {
   font-size: 12px;
 }
-.home-section {
+
+.home-section-header {
   position: relative;
   background: #ffffff;
+  left: 260px;
+  width: calc(100% - 260px);
+  transition: all 0.5s ease;
+}
+
+.home-section {
+  position: relative;
+  background: #D6DCE5;
   height: 100vh;
   left: 260px;
   width: calc(100% - 260px);
@@ -288,4 +298,21 @@
 .btn-logout {
   background: transparent;
   border: none;
+}
+
+.sidebar-style {
+  padding: 8px 3px;
+  border-radius: 5px;
+}
+
+.sidebar-active {
+  background: white;
+  width: 90%;
+}
+.sidebar-active > span {
+  color: #0073ff !important;
+}
+
+.link_name {
+  font-size: 15px !important;
 }
