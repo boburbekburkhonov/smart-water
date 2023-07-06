@@ -246,7 +246,7 @@ const Admin = () => {
             <Routes>
               <Route path="/" element={<AdminDashboard />} />
               <Route path="/news" element={<AdminNew />} />
-              <Route path="/station" element={<AdminStation />} />
+              <Route path="/stations" element={<AdminStation />} />
               <Route
                 path="/devices/notworking"
                 element={<AdminDevicesNotWorking />}
