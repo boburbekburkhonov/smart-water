@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import "./Admin.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import menuBar from "../../assets/images/menu-bar.png";
@@ -20,8 +20,10 @@ import AdminNew from "../AdminNews/AdminNew";
 import AdminStation from "../AdminStation/AdminStation";
 import AdminDevicesNotWorking from "../AdminDevicesNotWorking/AdminDevicesNotWorking";
 import AdminUser from "../AdminUser/AdminUser";
+import { apiGlobal } from "../API/Api.global";
 
 const Admin = () => {
+  const [data, setData] = useState([]);
   const token = window.localStorage.getItem("accessToken");
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,6 +38,34 @@ const Admin = () => {
     window.location.reload();
   }
 
+  useEffect(() => {
+    fetch(`${apiGlobal}/users/find-all-users`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+        Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setData(data.data));
+  }, []);
+
+  useEffect(() => {
+    if (data.length == 0) {
+      console.log(1, window.localStorage.getItem("accessToken"));
+      fetch(`${apiGlobal}/auth/refresh`, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          Authorization:
+            "Bearer " + window.localStorage.getItem("refreshToken"),
+        },
+      })
+        .then((res) => console.log(res))
+        .then((data) => data);
+    }
+  }, []);
+  console.log(data);
   return (
     <HelmetProvider>
       <div className="admin-wrapper">
