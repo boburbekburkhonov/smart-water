@@ -257,14 +257,14 @@ const AdminUser = () => {
                   className="btn btn-light"
                   data-bs-dismiss="modal"
                 >
-                  Yo'q
+                  Ha
                 </button>
                 <button
                   type="button"
                   className="btn btn-light"
                   data-bs-dismiss="modal"
                 >
-                  Ha
+                  Yo'q
                 </button>
               </div>
             </div>
@@ -356,7 +356,7 @@ const AdminUser = () => {
                                 if (i._id == e.roleId) {
                                   return i.name;
                                 }
-                              }).name
+                              })?.name
                             }
                           </td>
                           <td className="c-table__cell text-center">
@@ -406,7 +406,7 @@ const AdminUser = () => {
                 id="profile-overview"
               >
                 <form
-                  className="pt-4 ps-5 form-user-create-wrapper d-flex flex-wrap align-items-center"
+                  className="pt-4 ps-4 form-user-create-wrapper d-flex flex-wrap align-items-center"
                   onSubmit={createUser}
                 >
                   <div className="row mb-3 d-flex flex-column input-label-wrapper">

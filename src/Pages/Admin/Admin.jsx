@@ -21,8 +21,10 @@ import AdminStation from "../AdminStation/AdminStation";
 import AdminDevicesNotWorking from "../AdminDevicesNotWorking/AdminDevicesNotWorking";
 import AdminUser from "../AdminUser/AdminUser";
 import { apiGlobal } from "../API/Api.global";
+import Cookies from "js-cookie";
 
 const Admin = () => {
+  Cookies.set("refresh_token", window.localStorage.getItem("accessToken"));
   const [data, setData] = useState([]);
   const token = window.localStorage.getItem("accessToken");
   const location = useLocation();
@@ -38,34 +40,34 @@ const Admin = () => {
     window.location.reload();
   }
 
-  useEffect(() => {
-    fetch(`${apiGlobal}/users/find-all-users`, {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-        Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setData(data.data));
-  }, []);
+  // useEffect(() => {
+  //   fetch(`${apiGlobal}/users/find-all-users`, {
+  //     method: "GET",
+  //     headers: {
+  //       "content-type": "application/json",
+  //       Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => setData(data.data));
+  // }, []);
 
-  useEffect(() => {
-    if (data.length == 0) {
-      console.log(1, window.localStorage.getItem("accessToken"));
-      fetch(`${apiGlobal}/auth/refresh`, {
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-          Authorization:
-            "Bearer " + window.localStorage.getItem("refreshToken"),
-        },
-      })
-        .then((res) => console.log(res))
-        .then((data) => data);
-    }
-  }, []);
-  console.log(data);
+  // useEffect(() => {
+  //   fetch(`http://localhost:9090/films`, {
+  //     method: "GET",
+  //     "Access-Control-Allow-Origin": "*",
+  //     headers: {
+  //       "content-type": "application/json",
+  //       Cookie: "access_token=" + window.localStorage.getItem("refreshToken"),
+  //       Authorization: "Bearer " + window.localStorage.getItem("refreshToken"),
+  //     },
+  //     withCredentials: true,
+  //     credentials: "same-origin",
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => console.log(data));
+  // }, []);
+
   return (
     <HelmetProvider>
       <div className="admin-wrapper">
