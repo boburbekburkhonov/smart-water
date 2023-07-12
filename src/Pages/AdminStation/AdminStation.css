@@ -48,6 +48,11 @@
   max-height: 90vh !important;
 }
 
+.table-update-width {
+  max-width: 900px !important;
+  max-height: 90vh !important;
+}
+
 .modal-item-wrapper {
   padding: 13px 15px;
   max-width: 400px;
@@ -66,4 +71,13 @@
     justify-content: center !important;
   }
 
+}
+
+.input-label-station-wrapper {
+  max-width: 400px;
+  width: 100%;
+}
+
+.input-station {
+  max-width: 300px;
 }

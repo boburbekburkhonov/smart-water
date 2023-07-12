@@ -35,8 +35,9 @@ const AdminUser = () => {
     })
       .then((res) => res.json())
       .then((data) => setUsers(data.data));
-  }, []);
+  }, [count]);
 
+  // !USER
   const createUser = (e) => {
     e.preventDefault();
 
@@ -59,7 +60,8 @@ const AdminUser = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode == 200) {
-          toast.success("User yaratildi!");
+          setCount(count + 1);
+          toast.success("User muvaffaqqiyatli yaratildi!");
         }
       });
 
@@ -70,10 +72,40 @@ const AdminUser = () => {
     role.value = "";
   };
 
-  const updateUser = (userId) => {
-    console.log(changeUserId);
+  const updateUser = (e) => {
+    e.preventDefault();
+
+    const { nameDevice, username, phoneNumberUpdate, roleUpdate } = e.target;
+
+    console.log(
+      nameDevice.value,
+      username.value,
+      phoneNumberUpdate.value,
+      roleUpdate.value
+    );
   };
 
+  const deleteUser = () => {
+    fetch(`${apiGlobal}/users/delete-user`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+      },
+      body: JSON.stringify({
+        id: changeUserId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.statusCode == 200) {
+          setCount(count + 1);
+          toast.success("User muvaffaqqiyatli o'chirildi!");
+        }
+      });
+  };
+
+  // !ROLE
   const createRole = (e) => {
     e.preventDefault();
 
@@ -93,7 +125,7 @@ const AdminUser = () => {
       .then((data) => {
         if (data.statusCode == 200) {
           setCount(count + 1);
-          toast.success("Role yaratildi");
+          toast.success("Role muvaffaqqiyatli yaratildi");
         }
       });
 
@@ -113,13 +145,17 @@ const AdminUser = () => {
           className="modal fade"
           id="exampleModal"
           tabIndex="-1"
+          data-bs-backdrop="static"
           aria-labelledby="exampleModalLabel"
           aria-hidden="true"
         >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h1 className="modal-title fs-5" id="exampleModalLabel">
+                <h1
+                  className="modal-title text-primary fs-5"
+                  id="exampleModalLabel"
+                >
                   Userni o'zgartirish
                 </h1>
                 <button
@@ -249,13 +285,15 @@ const AdminUser = () => {
                 </button>
               </div>
               <div className="modal-body fw-semibold fs-5 text-dark text-center modal-delete-device">
-                O'ylab ko'ring! userni oʻchirish doimiy boʻladi.
+                O'ylab ko'ring! <span className="text-primary"> user </span> ni
+                oʻchirish doimiy boʻladi.
               </div>
               <div className="modal-footer border-top-0">
                 <button
                   type="button"
                   className="btn btn-light"
                   data-bs-dismiss="modal"
+                  onClick={deleteUser}
                 >
                   Ha
                 </button>
@@ -385,6 +423,7 @@ const AdminUser = () => {
                               className="btn-devices-edit"
                               data-bs-toggle="modal"
                               data-bs-target="#staticBackdrop"
+                              onClick={() => setChangeUserId(e._id)}
                             >
                               <img
                                 src="https://cdn-icons-png.flaticon.com/128/9713/9713380.png"
