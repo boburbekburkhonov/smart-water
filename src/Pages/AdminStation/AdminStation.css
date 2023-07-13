@@ -21,6 +21,20 @@
   border-radius: 10px;
 }
 
+.profile-search-station > ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+}
+
+.profile-search-station > ul > li {
+  margin: 0 15px;
+  background: #377BE8;
+  color: #ffffff;
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
 .previous > a {
   text-decoration: none;
   color: #ffffff;
@@ -80,4 +94,29 @@
 
 .input-station {
   max-width: 300px;
+}
+
+.search-name-wrapper {
+  background: #e8ebef;
+  padding: 10px 20px;
+  border-radius: 10px;
+  max-width: 800px;
+}
+
+.search-region-wrapper {
+  background: #e8ebef;
+  padding: 10px 20px;
+  border-radius: 10px;
+  max-width: 700px;
+}
+
+.search-label-region {
+  color: #417EE1;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.search-region {
+  max-width: 280px;
+  width: 100%;
 }
