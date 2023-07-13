@@ -1581,8 +1581,6 @@ const AdminStation = () => {
                         })}
                     </select>
                   </div>
-
-                  <button className="btn btn-primary">Qidirish</button>
                 </form>
 
                 {allStationByBalansOrg?.length == 0 ? (
