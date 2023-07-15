@@ -210,6 +210,27 @@ const AdminStation = () => {
     date.value = "";
   };
 
+  const createStationByExcel = (e) => {
+    e.preventDefault();
+
+    const { excelFile } = e.target;
+
+    const formData = new FormData();
+
+    formData.append("file", excelFile.files[0]);
+
+    fetch(`${apiGlobal}/stations/create/upload`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+      },
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  };
+
   const updateStation = (e) => {
     e.preventDefault();
 
@@ -1168,7 +1189,7 @@ const AdminStation = () => {
                                 />
                               </div>
                             </div>
-                            <form>
+                            <form onSubmit={createStationByExcel}>
                               <div className="kb-file-upload">
                                 <div className="file-upload-box">
                                   <input
@@ -1176,6 +1197,7 @@ const AdminStation = () => {
                                     id="fileupload"
                                     className="file-upload-input"
                                     onChange={InputChange}
+                                    name="excelFile"
                                     required
                                   />
                                   <span>
@@ -1195,17 +1217,11 @@ const AdminStation = () => {
                                     ) ? (
                                       <div className="file-image">
                                         {" "}
-                                        <img
-                                          src={excelFileImage}
-                                          alt=""
-                                        />
+                                        <img src={excelFileImage} alt="" />
                                       </div>
                                     ) : (
                                       <div className="file-image">
-                                      <img
-                                          src={excelFileImage}
-                                          alt=""
-                                        />
+                                        <img src={excelFileImage} alt="" />
                                       </div>
                                     )}
                                     <div className="file-detail">
@@ -1917,7 +1933,6 @@ const AdminStation = () => {
                   forcePage={currentPage}
                   previousLabel={"<<"}
                   nextLabel={">>"}
-                  // activeClassName={"pagination__link--active"}
                 />
               </div>
             </div>

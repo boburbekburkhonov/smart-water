@@ -555,33 +555,47 @@ const AdminUser = () => {
                 className="tab-pane fade profile-edit pt-3"
                 id="profile-edit"
               >
-                <form
-                  className=" ps-5 form-user-create-wrapper d-flex flex-wrap align-items-center"
-                  onSubmit={createRole}
-                >
-                  <div className="row mb-3 d-flex flex-column input-label-wrapper">
-                    <label
-                      htmlFor="rol"
-                      className="col-md-4 col-lg-3 col-form-label profile-heading fw-bold w-100"
-                    >
-                      Role
-                    </label>
-                    <div className="col-md-8 input-wrapper col-lg-9">
-                      <input
-                        name="roleCreate"
-                        type="text"
-                        className="form-control input-user"
-                        id="rol"
-                        required
-                      />
+                <div className="d-flex align-items-center justify-content-between">
+                  <form
+                    className=" ps-5 form-user-create-wrapper d-flex align-items-end w-50"
+                    onSubmit={createRole}
+                  >
+                    <div className="row d-flex flex-column input-label-wrapper">
+                      <label
+                        htmlFor="rol"
+                        className="col-md-4 col-lg-3 col-form-label profile-heading fw-bold w-100"
+                      >
+                        Role
+                      </label>
+                      <div className="col-md-8 input-wrapper col-lg-9">
+                        <input
+                          name="roleCreate"
+                          type="text"
+                          className="form-control input-user"
+                          id="rol"
+                          required
+                        />
+                      </div>
                     </div>
+                    <div className="w-50">
+                      <button className="btn btn-primary btn-create-user w-50">
+                        Saqlash
+                      </button>
+                    </div>
+                  </form>
+
+                  <div className="w-25">
+                    <h4 className="fw-bold fs-6">
+                      <span className="text-primary">Role</span> larning
+                      ro'yhati
+                    </h4>
+                    <select className="form-select">
+                      {role.map((e, i) => {
+                        return <option key={i}>{e.name}</option>;
+                      })}
+                    </select>
                   </div>
-                  <div className="w-50">
-                    <button className="btn btn-primary btn-create-user w-25">
-                      Saqlash
-                    </button>
-                  </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
