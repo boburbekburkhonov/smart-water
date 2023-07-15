@@ -8,6 +8,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import close from "../../assets/images/close.png";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import excelImage from "../../assets/images/excel.png";
+import excelFileImage from "../../assets/images/excel-file.png";
 
 const AdminStation = () => {
   const [count, setCount] = useState(0);
@@ -20,6 +22,7 @@ const AdminStation = () => {
   const [totalPagesSearch, setTotalPagesSearch] = useState(0);
   const [stationOne, setStationOne] = useState({});
   const [balansOrgId, setBalansOrgId] = useState();
+  const [selectedfile, SetSelectedFile] = useState("");
 
   useEffect(() => {
     fetch(`${apiGlobal}/stations/all?page=1&perPage=10`, {
@@ -37,15 +40,53 @@ const AdminStation = () => {
   }, [count]);
 
   useEffect(() => {
-    fetch(`${apiGlobal}/regions/all`, {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-        Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setAllRegions(data.regions));
+    const fetchDataRegion = async () => {
+      const requestRegionAll = await fetch(`${apiGlobal}/regions/all`, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+        },
+      });
+
+      const responseRegionAll = await requestRegionAll.json();
+      setAllRegions(responseRegionAll.regions);
+
+      const request = await fetch(
+        `${apiGlobal}/balance-organizations/${responseRegionAll.regions[0].id}`,
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            Authorization:
+              "Bearer " + window.localStorage.getItem("accessToken"),
+          },
+        }
+      );
+
+      const response = await request.json();
+      setAllBalansOrg(response.balanceOrganization);
+      setBalansOrgId(response.balanceOrganization[0].id);
+
+      fetch(
+        `${apiGlobal}/stations/all/balanceOrganization?balanceOrganizationNumber=${response.balanceOrganization[0].id}&page=1&perPage=10`,
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            Authorization:
+              "Bearer " + window.localStorage.getItem("accessToken"),
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setTotalPagesSearch(data.metadata.lastPage);
+          setAllStationByBalansOrg(data.data);
+        });
+    };
+
+    fetchDataRegion();
   }, []);
 
   const handlePageChange = (selectedPage) => {
@@ -66,7 +107,6 @@ const AdminStation = () => {
   };
 
   const handlePageChangeSearch = (selectedPage) => {
-    console.log(selectedPage);
     fetch(
       `${apiGlobal}/stations/all/balanceOrganization?balanceOrganizationNumber=${balansOrgId}&page=${
         selectedPage.selected + 1
@@ -352,6 +392,33 @@ const AdminStation = () => {
         setTotalPagesSearch(data.metadata.lastPage);
         setAllStationByBalansOrg(data.data);
       });
+  };
+
+  const filesizes = (bytes, decimals = 2) => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+  };
+
+  const InputChange = (e) => {
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      SetSelectedFile({
+        filename: e.target.files[0].name,
+        filetype: e.target.files[0].type,
+        fileimage: reader.result,
+        datetime: e.target.files[0].lastModifiedDate.toLocaleString("en-IN"),
+        filesize: filesizes(e.target.files[0].size),
+      });
+    };
+    if (e.target.files[0]) {
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -1042,6 +1109,151 @@ const AdminStation = () => {
           </div>
         </div>
 
+        {/* MODAL UPLOAD   */}
+        <div
+          className="modal fade"
+          id="staticBackdrops"
+          data-bs-backdrop="static"
+          data-bs-keyboard="false"
+          tabIndex="-1"
+          aria-labelledby="staticBackdropLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog table-upload-width modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <div className="d-flex align-items-center">
+                  <h1
+                    className="modal-title fs-4 fw-semibold text-success"
+                    id="staticBackdropLabel"
+                  >
+                    Excel
+                  </h1>
+                  <img
+                    className="ms-2"
+                    src={excelImage}
+                    alt="excelImage"
+                    width={25}
+                    height={25}
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div className="fileupload-view">
+                  <div className="row justify-content-center m-0">
+                    <div className="upload-column">
+                      <div className="card-upload mt-5">
+                        <div className="card-body">
+                          <div className="kb-data-box">
+                            <div className="kb-modal-data-title">
+                              <div className="kb-data-title d-flex align-items-center ">
+                                <h6>
+                                  <span className="text-success fs-5 fw-semibold">
+                                    Excel file
+                                  </span>{" "}
+                                  kiriting
+                                </h6>
+                                <img
+                                  className="ms-2"
+                                  src={excelImage}
+                                  alt="excelImage"
+                                  width={20}
+                                  height={20}
+                                />
+                              </div>
+                            </div>
+                            <form>
+                              <div className="kb-file-upload">
+                                <div className="file-upload-box">
+                                  <input
+                                    type="file"
+                                    id="fileupload"
+                                    className="file-upload-input"
+                                    onChange={InputChange}
+                                    required
+                                  />
+                                  <span>
+                                    Drag and drop or{" "}
+                                    <span className="file-link">
+                                      Choose your file
+                                    </span>
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="kb-attach-box mb-3">
+                                {selectedfile !== "" ? (
+                                  <div className="file-atc-box">
+                                    {selectedfile.filename.match(
+                                      /.(jpg|jpeg|png|gif|svg)$/i
+                                    ) ? (
+                                      <div className="file-image">
+                                        {" "}
+                                        <img
+                                          src={excelFileImage}
+                                          alt=""
+                                        />
+                                      </div>
+                                    ) : (
+                                      <div className="file-image">
+                                      <img
+                                          src={excelFileImage}
+                                          alt=""
+                                        />
+                                      </div>
+                                    )}
+                                    <div className="file-detail">
+                                      <h6>{selectedfile.filename}</h6>
+                                      <p>
+                                        <span>
+                                          Size : {selectedfile.filesize}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+
+                              <div className="kb-buttons-box">
+                                <button
+                                  type="submit"
+                                  className="btn btn-primary form-submit"
+                                >
+                                  Yuklash
+                                </button>
+                              </div>
+                            </form>
+                            <div className="kb-attach-box">
+                              <hr />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="card">
           <div className="card-body pt-3">
             <ul className="nav nav-tabs nav-tabs-bordered">
@@ -1071,7 +1283,7 @@ const AdminStation = () => {
                   data-bs-toggle="tab"
                   data-bs-target="#profile-search"
                 >
-                  Qidiruv
+                  Viloyat bo'yicha qidirish
                 </button>
               </li>
             </ul>
@@ -1080,6 +1292,7 @@ const AdminStation = () => {
                 className="tab-pane fade show active profile-users table-scroll"
                 id="profile-users"
               >
+                <h3 className="stations-search-heading">Qidirish</h3>
                 <form
                   onSubmit={searchNameOrImei}
                   className="search-name-wrapper d-flex align-items-center justify-content-between"
@@ -1226,6 +1439,15 @@ const AdminStation = () => {
                 className="tab-pane fade profile-overview"
                 id="profile-overview"
               >
+                <div className="text-end">
+                  <button
+                    className="btn btn-success"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrops"
+                  >
+                    Excel bilan qo'shish
+                  </button>
+                </div>
                 <form
                   className="pt-4 ps-4 form-user-create-wrapper d-flex flex-wrap align-items-center"
                   onSubmit={createStation}
