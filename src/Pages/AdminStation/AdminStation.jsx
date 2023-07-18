@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { apiGlobal } from "../API/Api.global";
 import ReactPaginate from "react-paginate";
 import "./AdminStation.css";
-import next from "../../assets/images/next.png";
 import circle from "../../assets/images/circle.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,6 +9,7 @@ import close from "../../assets/images/close.png";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import excelImage from "../../assets/images/excel.png";
 import excelFileImage from "../../assets/images/excel-file.png";
+import moment from "moment";
 
 const AdminStation = () => {
   const [count, setCount] = useState(0);
@@ -222,13 +222,20 @@ const AdminStation = () => {
     fetch(`${apiGlobal}/stations/create/upload`, {
       method: "POST",
       headers: {
-        "content-type": "application/json",
         Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
       },
       body: formData,
     })
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        if (data.statusCode == 200) {
+          setCount(count + 1);
+          toast.success("Stansiya muvaffaqqiyatli yaratildi!");
+          SetSelectedFile("");
+        } else {
+          toast.error(data.message);
+        }
+      });
   };
 
   const updateStation = (e) => {
@@ -483,40 +490,19 @@ const AdminStation = () => {
                 <div className="modal-body-item m-auto d-flex align-items-center justify-content-between flex-wrap">
                   <div className="modal-item-wrapper d-flex align-items-center  mt-3">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Nomi</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Nomi:</p>
                     <p className="m-0 ms-2 fw-semibold">{stationOne.name}</p>
                   </div>
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Imei</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Imei:</p>
                     <p className="m-0 ms-2 fw-semibold">{stationOne.imel}</p>
                   </div>
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Viloyat id</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Viloyat id:</p>
                     <p className="m-0 ms-2 fw-semibold">
                       {stationOne.region_id}
                     </p>
@@ -524,14 +510,7 @@ const AdminStation = () => {
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Tuman id</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Tuman id:</p>
                     <p className="m-0 ms-2 fw-semibold">
                       {stationOne.district_id}
                     </p>
@@ -539,14 +518,7 @@ const AdminStation = () => {
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Balans tashkilot id</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Balans tashkilot id:</p>
                     <p className="m-0 ms-2 fw-semibold">
                       {stationOne.balance_organization_id}
                     </p>
@@ -554,14 +526,7 @@ const AdminStation = () => {
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">User telefon raqami</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">User telefon raqami:</p>
                     <p className="m-0 ms-2 fw-semibold">
                       {stationOne.userPhoneNum}
                     </p>
@@ -569,14 +534,7 @@ const AdminStation = () => {
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Qurilma telefon raqami</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Qurilma telefon raqami:</p>
                     <p className="m-0 ms-2 fw-semibold">
                       {stationOne.devicePhoneNum}
                     </p>
@@ -584,14 +542,7 @@ const AdminStation = () => {
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Lokatsiya</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Lokatsiya:</p>
                     <p className="m-0 ms-2 fw-semibold">
                       {stationOne.location}
                     </p>
@@ -599,14 +550,7 @@ const AdminStation = () => {
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Datani yuborish vaqti</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Datani yuborish vaqti:</p>
                     <p className="m-0 ms-2 fw-semibold">
                       {stationOne.sendDataTime}
                     </p>
@@ -614,14 +558,7 @@ const AdminStation = () => {
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Infoni yuborish vaqti</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Infoni yuborish vaqti:</p>
                     <p className="m-0 ms-2 fw-semibold">
                       {stationOne.sendInfoTime}
                     </p>
@@ -629,14 +566,7 @@ const AdminStation = () => {
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Programma versiyasi</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Programma versiyasi:</p>
                     <p className="m-0 ms-2 fw-semibold">
                       {stationOne.programVersion}
                     </p>
@@ -644,14 +574,7 @@ const AdminStation = () => {
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Temperatura</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Temperatura:</p>
                     <p className="m-0 ms-2 fw-semibold">
                       {stationOne.temperture}
                     </p>
@@ -659,14 +582,7 @@ const AdminStation = () => {
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Batareya</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Batareya:</p>
                     <p
                       className={
                         "m-0 ms-2 fw-semibold " +
@@ -685,42 +601,30 @@ const AdminStation = () => {
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Signal</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Signal:</p>
                     <p className="m-0 ms-2 fw-semibold">{stationOne.signal}</p>
                   </div>
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Status</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Status:</p>
                     <p className="m-0 ms-2 fw-semibold">{stationOne.status}</p>
                   </div>
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Sensor type id</p>
-                    <img
-                      src={next}
-                      className="ms-3"
-                      alt="name"
-                      width={17}
-                      height={17}
-                    />
+                    <p className="m-0 ms-4">Sensor type id:</p>
                     <p className="m-0 ms-2 fw-semibold">
                       {stationOne.sensorTypeId}
+                    </p>
+                  </div>
+
+                  <div className="modal-item-wrapper d-flex align-items-center ">
+                    <img src={circle} alt="name" width={20} height={20} />
+                    <p className="m-0 ms-4">Sana:</p>
+                    <p className="m-0 ms-2 fw-semibold">
+                      {moment(stationOne.date).format("L")}{" "}
+                      {stationOne.date?.split("T")[1]?.slice(0, 8)}
                     </p>
                   </div>
                 </div>
@@ -1247,24 +1151,12 @@ const AdminStation = () => {
                                 </button>
                               </div>
                             </form>
-                            <div className="kb-attach-box">
-                              <hr />
-                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
               </div>
             </div>
           </div>
@@ -1326,7 +1218,7 @@ const AdminStation = () => {
                     name="nameOrImeiSelect"
                     required
                   >
-                    <option value="name">Name</option>
+                    <option value="name">Nomi</option>
                     <option value="imei">Imei</option>
                     <option value="all">All</option>
                   </select>

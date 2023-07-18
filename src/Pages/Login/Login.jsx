@@ -1,18 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Login.css";
 import { apiGlobal } from "../API/Api.global";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [error, setError] = useState(false);
+  const [checkRemember, setCheckRemember] = useState("off");
 
-  const login = (e) => {
+  useEffect(() => {
+    if (
+      window.localStorage.getItem("username") &&
+      window.localStorage.getItem("password")
+    ) {
+      fetch(`${apiGlobal}/auth/signin`, {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          username: window.localStorage.getItem("username"),
+          password: window.localStorage.getItem("password"),
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.statusCode == 200) {
+            window.localStorage.setItem("accessToken", data.data.accessToken);
+            window.localStorage.setItem("refreshToken", data.data.refreshToken);
+            window.location.href = "/admin";
+          }
+        });
+    }
+  }, []);
+
+  const login = async (e) => {
     e.preventDefault();
     const { username, password } = e.target;
 
-    console.log(username.value, password.value);
-
-    fetch(`${apiGlobal}/auth/signin`, {
+    const request = await fetch(`${apiGlobal}/auth/signin`, {
       method: "post",
       headers: {
         "content-type": "application/json",
@@ -21,18 +46,22 @@ const Login = () => {
         username: username.value,
         password: password.value,
       }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode == 200) {
-          window.localStorage.setItem("accessToken", data.data.accessToken);
-          window.localStorage.setItem("refreshToken", data.data.refreshToken);
-          window.location.href = "/admin";
-        } else {
-          setError(true);
-          setErrorMessage(data.message);
-        }
-      });
+    });
+
+    const response = await request.json();
+
+    if (response.statusCode == 200) {
+      if (checkRemember == "on") {
+        window.localStorage.setItem("username", username.value);
+        window.localStorage.setItem("password", password.value);
+      }
+      window.localStorage.setItem("accessToken", response.data.accessToken);
+      window.localStorage.setItem("refreshToken", response.data.refreshToken);
+      window.location.href = "/admin";
+    } else {
+      setError(true);
+      setErrorMessage("Username yoki password noto'g'ri!");
+    }
 
     username.value = "";
     password.value = "";
@@ -85,6 +114,20 @@ const Login = () => {
               placeholder="Password"
               required
             />
+          </div>
+
+          <div className="login-group-check mt-4">
+            <input
+              id="check"
+              type="checkbox"
+              onChange={() =>
+                setCheckRemember(checkRemember == "off" ? "on" : "off")
+              }
+              className="check"
+            />
+            <label htmlFor="check" className="login-group-check-label">
+              Eslab qolish
+            </label>
           </div>
 
           <p className="error-message text-danger">

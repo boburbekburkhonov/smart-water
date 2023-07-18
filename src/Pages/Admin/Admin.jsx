@@ -35,6 +35,8 @@ const Admin = () => {
   }
 
   function logoutFunction() {
+    window.localStorage.removeItem("username");
+    window.localStorage.removeItem("password");
     window.localStorage.removeItem("accessToken");
     window.localStorage.removeItem("refreshToken");
     window.location.reload();
