@@ -18,6 +18,7 @@ const AdminStation = () => {
   const [allBalansOrg, setAllBalansOrg] = useState([]);
   const [allStationByBalansOrg, setAllStationByBalansOrg] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [currentPageRegion, setCurrentPageRegion] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalPagesSearch, setTotalPagesSearch] = useState(0);
   const [stationOne, setStationOne] = useState({});
@@ -385,10 +386,10 @@ const AdminStation = () => {
     const response = await request.json();
 
     setAllBalansOrg(response.balanceOrganization);
-    setBalansOrgId(response.balanceOrganization[0].id);
+    setBalansOrgId(response.balanceOrganization[0]?.id);
 
     fetch(
-      `${apiGlobal}/stations/all/balanceOrganization?balanceOrganizationNumber=${response.balanceOrganization[0].id}&page=1&perPage=10`,
+      `${apiGlobal}/stations/all/balanceOrganization?balanceOrganizationNumber=${response.balanceOrganization[0]?.id}&page=1&perPage=10`,
       {
         method: "GET",
         headers: {
@@ -399,7 +400,7 @@ const AdminStation = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        setTotalPagesSearch(data.metadata.lastPage);
+        setTotalPagesSearch(data.metadata?.lastPage);
         setAllStationByBalansOrg(data.data);
       });
   };
@@ -1339,7 +1340,6 @@ const AdminStation = () => {
                   previousLabel={"<<"}
                   nextLabel={">>"}
                   activeClassName={"pagination__link--active"}
-                  pageRangeDisplayed={1}
                 />
               </div>
 
@@ -1822,7 +1822,7 @@ const AdminStation = () => {
                 <ReactPaginate
                   pageCount={totalPagesSearch}
                   onPageChange={handlePageChangeSearch}
-                  forcePage={currentPage}
+                  forcePage={currentPageRegion}
                   previousLabel={"<<"}
                   nextLabel={">>"}
                 />
