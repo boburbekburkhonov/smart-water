@@ -22,6 +22,7 @@ const AdminStation = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [totalPagesSearch, setTotalPagesSearch] = useState(0);
   const [stationOne, setStationOne] = useState({});
+  const [sensorType, setSensorType] = useState([]);
   const [balansOrgId, setBalansOrgId] = useState();
   const [selectedfile, SetSelectedFile] = useState("");
 
@@ -88,6 +89,20 @@ const AdminStation = () => {
     };
 
     fetchDataRegion();
+
+    fetch(`${apiGlobal}/stations/sensorType/all`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+        Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.statusCode == 200) {
+          setSensorType(data.data);
+        }
+      });
   }, []);
 
   const handlePageChange = (selectedPage) => {
@@ -135,7 +150,7 @@ const AdminStation = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => setStationOne(data.data[0]));
+      .then((data) => setStationOne(data?.data[0]));
   };
 
   const createStation = (e) => {
@@ -466,7 +481,7 @@ const AdminStation = () => {
           pauseOnHover
         />
 
-        {/* <!-- Modal LIST ONE --> */}
+        {/*! Modal LIST ONE  */}
         <div
           className="modal fade"
           id="exampleModal"
@@ -616,7 +631,13 @@ const AdminStation = () => {
                     <img src={circle} alt="name" width={20} height={20} />
                     <p className="m-0 ms-4">Sensor type id:</p>
                     <p className="m-0 ms-2 fw-semibold">
-                      {stationOne.sensorTypeId}
+                      {
+                        sensorType.find((e) => {
+                          if (e._id == stationOne.sensorTypeId) {
+                            return e.name;
+                          }
+                        })?.name
+                      }
                     </p>
                   </div>
 
