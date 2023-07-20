@@ -22,6 +22,9 @@ const AdminStation = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [totalPagesSearch, setTotalPagesSearch] = useState(0);
   const [stationOne, setStationOne] = useState({});
+  const [stationRegionName, setStationRegionName] = useState();
+  const [stationDistrictName, setStationDistrictName] = useState([]);
+  const [stationBalansOrgName, setStationBalansOrgName] = useState([]);
   const [sensorType, setSensorType] = useState([]);
   const [balansOrgId, setBalansOrgId] = useState();
   const [selectedfile, SetSelectedFile] = useState("");
@@ -141,16 +144,66 @@ const AdminStation = () => {
       });
   };
 
-  const getStationWithImei = (imei) => {
-    fetch(`${apiGlobal}/stations/searchImel?imel=${imei}`, {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-        Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setStationOne(data?.data[0]));
+  const getStationWithImei = async (imei) => {
+    const requestStationOne = await fetch(
+      `${apiGlobal}/stations/searchImel?imel=${imei}`,
+      {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+        },
+      }
+    );
+
+    const responseStationOne = await requestStationOne.json();
+    setStationOne(responseStationOne?.data[0]);
+
+    // REGION NAME
+    const requestRegionName = await fetch(
+      `${apiGlobal}/regions/${responseStationOne?.data[0].region_id}`,
+      {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+        },
+      }
+    );
+    const responseRegionName = await requestRegionName.json();
+
+    setStationRegionName(responseRegionName.region.name);
+
+    // DISTRICT NAME
+    const requestDistrictName = await fetch(
+      `${apiGlobal}/districts/${responseStationOne?.data[0].region_id}`,
+      {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+        },
+      }
+    );
+
+    const responseDistrictName = await requestDistrictName.json();
+
+    setStationDistrictName(responseDistrictName.district);
+
+    // BALANS ORGANIZATION NAME
+    const requestBalansOrgName = await fetch(
+      `${apiGlobal}/balance-organizations/${responseStationOne?.data[0].region_id}`,
+      {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
+        },
+      }
+    );
+
+    const responseBalansOrgName = await requestBalansOrgName.json();
+    setStationBalansOrgName(responseBalansOrgName.balanceOrganization);
   };
 
   const createStation = (e) => {
@@ -518,25 +571,35 @@ const AdminStation = () => {
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Viloyat id:</p>
+                    <p className="m-0 ms-4">Viloyat:</p>
+                    <p className="m-0 ms-2 fw-semibold">{stationRegionName}</p>
+                  </div>
+
+                  <div className="modal-item-wrapper d-flex align-items-center ">
+                    <img src={circle} alt="name" width={20} height={20} />
+                    <p className="m-0 ms-4">Tuman:</p>
                     <p className="m-0 ms-2 fw-semibold">
-                      {stationOne.region_id}
+                      {
+                        stationDistrictName.find((e) => {
+                          if (e.id == stationOne.district_id) {
+                            return e.name;
+                          }
+                        })?.name
+                      }
                     </p>
                   </div>
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Tuman id:</p>
+                    <p className="m-0 ms-4">Balans tashkiloti:</p>
                     <p className="m-0 ms-2 fw-semibold">
-                      {stationOne.district_id}
-                    </p>
-                  </div>
-
-                  <div className="modal-item-wrapper d-flex align-items-center ">
-                    <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Balans tashkilot id:</p>
-                    <p className="m-0 ms-2 fw-semibold">
-                      {stationOne.balance_organization_id}
+                      {
+                        stationBalansOrgName.find((e) => {
+                          if (e.id == stationOne.balance_organization_id) {
+                            return e.name;
+                          }
+                        })?.name
+                      }
                     </p>
                   </div>
 
@@ -629,7 +692,7 @@ const AdminStation = () => {
 
                   <div className="modal-item-wrapper d-flex align-items-center ">
                     <img src={circle} alt="name" width={20} height={20} />
-                    <p className="m-0 ms-4">Sensor type id:</p>
+                    <p className="m-0 ms-4">Sensor type:</p>
                     <p className="m-0 ms-2 fw-semibold">
                       {
                         sensorType.find((e) => {

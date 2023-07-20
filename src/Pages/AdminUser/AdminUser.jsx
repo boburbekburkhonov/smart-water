@@ -555,9 +555,9 @@ const AdminUser = () => {
                 className="tab-pane fade profile-edit pt-3"
                 id="profile-edit"
               >
-                <div className="d-flex align-items-center justify-content-between">
+                <div className="d-flex align-items-center justify-content-between flex-wrap">
                   <form
-                    className=" ps-5 form-user-create-wrapper d-flex align-items-end w-50"
+                    className=" ps-5 form-user-create-wrapper form-role-create-wrapper d-flex align-items-end w-50"
                     onSubmit={createRole}
                   >
                     <div className="row d-flex flex-column input-label-wrapper">
@@ -584,7 +584,7 @@ const AdminUser = () => {
                     </div>
                   </form>
 
-                  <div className="w-25">
+                  <div className="w-25 role-list-wrapper">
                     <h4 className="fw-bold fs-6">
                       <span className="text-primary">Role</span> larning
                       ro'yhati
