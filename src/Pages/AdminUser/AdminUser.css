@@ -151,15 +151,19 @@ th {
 }
 
 .form-role-create-wrapper {
-  padding: 10px 0px;
+  padding: 10px 25px;
   background: #E8EBEF;
   border-radius: 10px;
+  max-width: 450px;
+  width: 100%;
 }
 
 .role-list-wrapper {
   padding: 15px 25px;
   background: #E8EBEF;
   border-radius: 10px;
+  max-width: 380px;
+  width: 100%;
 }
 
 /* Mobile table styles */
@@ -241,9 +245,30 @@ th {
   }
 }
 
+@media (max-width: 1044px) {
+  .role-create-list-wrapper {
+    justify-content: center !important;
+  }
+
+  .form-role-create-wrapper {
+    margin-bottom: 20px;
+    max-width: 500px;
+  }
+
+  .role-list-wrapper {
+    max-width: 500px;
+  }
+}
+
 @media (max-width: 940px) {
   .form-user-create-wrapper {
     padding-left: 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-create-role {
+    margin-left: 10PX;
   }
 }
 

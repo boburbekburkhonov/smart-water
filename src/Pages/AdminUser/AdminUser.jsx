@@ -555,9 +555,9 @@ const AdminUser = () => {
                 className="tab-pane fade profile-edit pt-3"
                 id="profile-edit"
               >
-                <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div className="d-flex align-items-center justify-content-between flex-wrap role-create-list-wrapper">
                   <form
-                    className=" ps-5 form-user-create-wrapper form-role-create-wrapper d-flex align-items-end w-50"
+                    className=" form-role-create-wrapper d-flex align-items-end"
                     onSubmit={createRole}
                   >
                     <div className="row d-flex flex-column input-label-wrapper">
@@ -567,7 +567,7 @@ const AdminUser = () => {
                       >
                         Role
                       </label>
-                      <div className="col-md-8 input-wrapper col-lg-9">
+                      <div className="col-md-8 input-role-wrapper col-lg-9">
                         <input
                           name="roleCreate"
                           type="text"
@@ -578,13 +578,13 @@ const AdminUser = () => {
                       </div>
                     </div>
                     <div className="w-50">
-                      <button className="btn btn-primary btn-create-user w-50">
+                      <button className="btn btn-primary btn-create-role">
                         Saqlash
                       </button>
                     </div>
                   </form>
 
-                  <div className="w-25 role-list-wrapper">
+                  <div className="role-list-wrapper">
                     <h4 className="fw-bold fs-6">
                       <span className="text-primary">Role</span> larning
                       ro'yhati
